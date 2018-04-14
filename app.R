@@ -5,6 +5,11 @@ ui <- fluidPage(
   
    titlePanel("Power Analysis for 2x2 Factorial Interaction"),
    
+   em("See https://www.markhw.com/blog/power-twoway 
+      for instructions and information."),
+   br(),
+   br(),
+   
    sidebarLayout(
       sidebarPanel(
         h4("Input Standardized Means"),
