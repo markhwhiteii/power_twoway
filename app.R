@@ -46,7 +46,7 @@ ui <- fluidPage(
         ),
         numericInput(
           "reps",
-          "Repetitions For Each Sample Size",
+          "# of Simulations For Each Sample Size",
           100
         ),
         h4("Run Power Analysis:"),
@@ -71,7 +71,8 @@ server <- function(input, output) {
   )
   results <- eventReactive(input$submit, {
     power_analysis(
-      f1l1_f2l1, f1l1_f2l2, f1l2_f2l1, f1l2_f2l2, reps, start, end, by
+      input$f1l1_f2l1, input$f1l1_f2l2, input$f1l2_f2l1, input$f1l2_f2l2, 
+      input$reps, input$start, input$end, input$by
     )
   })
   output$power_analysis_results <- renderTable(results(), digits = c(0, 2))
@@ -79,4 +80,3 @@ server <- function(input, output) {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
-
