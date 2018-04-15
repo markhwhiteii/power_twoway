@@ -47,12 +47,14 @@ power_analysis <- function(f1l1_f2l1, f1l1_f2l2, f1l2_f2l1,
 plot_mean_pattern <- function(f1l1_f2l1, f1l1_f2l2, f1l2_f2l1, f1l2_f2l2) {
   require(ggplot2)
   dat <- data.frame(
-    factor_1 = c("level_1", "level_1", "level_2", "level_2"),
-    factor_2 = c("level_1", "level_2", "level_1", "level_2"),
-    zoutcome = c(f1l1_f2l1, f1l1_f2l2, f1l2_f2l1, f1l2_f2l2)
+    factor_1 = c("Level 1", "Level 1", "Level 2", "Level 2"),
+    factor_2 = c("Level 1", "Level 2", "Level 1", "Level 2"),
+    Outcome = c(f1l1_f2l1, f1l1_f2l2, f1l2_f2l1, f1l2_f2l2)
   )
-  ggplot(dat, aes(x = factor_1, y = zoutcome, color = factor_2)) +
-    geom_point(position = position_dodge(width = 1), size = 3) +
+  ggplot(dat, aes(x = factor_1, y = Outcome, color = factor_2)) +
+    geom_point(position = position_dodge(width = 1), size = 4) +
     theme_light() +
-    theme(text = element_text(size = 16))
+    labs(x = "Factor 1") +
+    scale_color_discrete(name = "Factor 2") +
+    theme(text = element_text(size = 18))
 }
