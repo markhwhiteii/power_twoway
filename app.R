@@ -54,6 +54,12 @@ ui <- fluidPage(
           "# of Simulations For Each Sample Size",
           100
         ),
+        numericInput(
+          "alpha",
+          "Alpha Level",
+          .05,
+          min = .001, max = .20, step = .001
+        ),
         h4("Run Power Analysis:"),
         actionButton("submit", "Submit"),
         br(),
@@ -77,7 +83,7 @@ server <- function(input, output) {
   results <- eventReactive(input$submit, {
     power_analysis(
       input$f1l1_f2l1, input$f1l1_f2l2, input$f1l2_f2l1, input$f1l2_f2l2, 
-      input$reps, input$start, input$end, input$by
+      input$reps, input$start, input$end, input$by, input$alpha
     )
   })
   output$power_analysis_results <- renderTable(results(), digits = c(0, 2))
