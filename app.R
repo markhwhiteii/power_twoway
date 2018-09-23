@@ -2,14 +2,11 @@ library(shiny)
 source("helpers.R")
 
 ui <- fluidPage(
-  
    titlePanel("Power Analysis for 2x2 Factorial Interaction"),
-   
    em("See https://www.markhw.com/blog/power-twoway 
       for instructions and information."),
    br(),
    br(),
-   
    sidebarLayout(
       sidebarPanel(
         h4("Input Standardized Means"),
@@ -66,10 +63,9 @@ ui <- fluidPage(
         em("Depending on your inputs, please allow a few minutes to compute.")
       ),
       mainPanel(
-        h4("Power Analysis Results:"),
-        tableOutput("power_analysis_results"),
         h4("Mean Pattern Plot:"),
-        plotOutput("mean_pattern_plot")
+        plotOutput("mean_pattern_plot"),
+        uiOutput("power_analysis_results")
       )
    )
 )
@@ -81,13 +77,23 @@ server <- function(input, output) {
     )
   )
   results <- eventReactive(input$submit, {
-    power_analysis(
-      input$f1l1_f2l1, input$f1l1_f2l2, input$f1l2_f2l1, input$f1l2_f2l2, 
+    m <- showNotification("Calculating Power...", duration = NULL)
+    tmp <- power_analysis(
+      input$f1l1_f2l1, input$f1l1_f2l2, input$f1l2_f2l1, input$f1l2_f2l2,
       input$reps, input$start, input$end, input$by, input$alpha
     )
+    removeNotification(m)
+    showNotification("Done!", duration = 1)
+    tmp
   })
-  output$power_analysis_results <- renderTable(results(), digits = c(0, 2))
+  output$power_analysis_results <- renderUI({
+    if (is.data.frame(results())) {
+      tagList(
+        h4("Power Analysis Results:"),
+        renderTable(results(), digits = c(0, 2))
+      )
+    }
+  })
 }
 
-# Run the application 
 shinyApp(ui = ui, server = server)
